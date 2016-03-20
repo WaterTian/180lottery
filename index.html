@@ -11,14 +11,15 @@
 				margin: 0px;
 				overflow: hidden;
 				font-family:Monospace;
-				font-size:13px;
 				text-align:center;
 				font-weight: bold;
 				text-align:center;
 			}
 			#loading {
+				color: #ffffff;
+				font-size: 60px;
 				position: absolute;
-				top: 10px; width: 100%;
+				top: 5px; width: 100%;
 				z-index: 1;
 				padding: 3em 0 0 0;
 			}
@@ -32,9 +33,9 @@
 
 		<script src="build/three.min.js"></script>
 		<script src="build/TweenMax.min.js"></script>
-		<script src="build/stats.min.js"></script>
 
 		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 
 		<script src="js/shaders/CopyShader.js"></script>
@@ -60,6 +61,7 @@
 
 
 			var isStart=false;
+
 
 
 
@@ -135,11 +137,14 @@
 				loadTex(0);
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
 				document.addEventListener( 'click', Choose, false );
-				document.addEventListener( 'touchstart', Choose, false );
+				document.addEventListener( 'touchend', Choose, false );
 
 				window.addEventListener( 'resize', onWindowResize, false );
-				document.addEventListener('touchmove', function(event){event.preventDefault();}, false);
+				// document.addEventListener('touchmove', function(event){event.preventDefault();}, false);
+
+                if (window.DeviceOrientationEvent)window.addEventListener("deviceorientation", orientationHandler, false);
 
 			}
 
@@ -423,7 +428,7 @@
 
 						if(_num==papleNum-1)
 						{
-							setTimeout(initPlans,6000);
+							setTimeout(initPlans,100);
 							document.getElementById( 'loading' ).textContent="";
 						}
 					}
@@ -437,7 +442,7 @@
 			{
 				
 				geometry = new THREE.Geometry();
-				for ( i = 0; i < 600; i ++ ) {
+				for ( i = 0; i < 120; i ++ ) {
 					var vertex = new THREE.Vector3();
 					vertex.x = Math.random() * 2000 - 1000;
 					vertex.y = Math.random() * 2000 - 1000;
@@ -447,7 +452,7 @@
 
 				for ( i = 0; i < picNums.length; i ++ ) 
 				{
-					var _m = new THREE.PointsMaterial( { size:Math.random()*20+20, map: sprites[picNums[i]], depthTest: true, transparent : true } );
+					var _m = new THREE.PointsMaterial( { size:Math.random()*40+40, map: sprites[picNums[i]], depthTest: true, transparent : true } );
 					materials.push(_m);
 
 					var _p = new THREE.Points( geometry, _m);
@@ -465,7 +470,7 @@
 				setTimeout(function()
 				{
 					ChooseAble=true;
-				},3000);
+				},100);
 
 			}
 
@@ -486,6 +491,24 @@
 				mouseY = event.clientY - windowHalfY;
 			}
 
+			function onDocumentTouchMove( event ) {
+
+				event.preventDefault();
+				// if (event.targetTouches.length == 1) 
+				// { 
+				// 	var touch = event.targetTouches[0]; 
+				// 	mouseX = touch.pageX- windowHalfX;
+				// 	mouseY = touch.pageY- windowHalfY;
+			 //    }
+			}
+
+			function orientationHandler(event) {
+				var _a=180-Math.abs(event.alpha-180);
+				var _b=event.beta-90;
+
+				mouseX = _a/30*windowHalfX;
+				mouseY = _b/90*windowHalfY;
+			}
 
 			//
 			function animate() {
@@ -500,8 +523,8 @@
 			var isFullScreen=false;
 			function Choose(event)
 			{
-				requestFullScreen();
-				if(!isFullScreen)return;
+				// requestFullScreen();
+				// if(!isFullScreen)return;
 				if(!isStart)
 				{
 					isStart=true;
@@ -510,8 +533,6 @@
 						scene.remove(sky);
 						sky=null;
 					}
-
-
 					return;
 				}
 
@@ -542,7 +563,7 @@
 		    	MoveAble=false;
 				for ( i = 0; i < particles.length; i ++ ) 
 				{
-					particles[i].material=new THREE.PointsMaterial({size:100,map:ChoosedSprite,depthTest:true,transparent:true});
+					particles[i].material=new THREE.PointsMaterial({size:200,map:ChoosedSprite,depthTest:true,transparent:true});
 				}
 
 
@@ -571,7 +592,7 @@
 
 			function render() {
 
-				var time = Date.now() * 0.000001;
+				var time = Date.now() * 0.000002;
 
 				var _x=mouseX*0.006;
 				var _y=mouseY*0.006;
@@ -589,7 +610,7 @@
 
 				   if(isStart) camera.position.z += ( 1000 - camera.position.z ) * 0.05;
 			    }else{
-				   time = Date.now() * 0.0001;
+				   time = Date.now() * 0.0002;
 				   if(isStart) camera.position.z += ( 3000 - camera.position.z ) * 0.05;
 			    }
 
@@ -670,12 +691,10 @@
 		         de.webkitRequestFullScreen();
 		     }
 
-		     
-
 			setTimeout(function()
 			{
 				isFullScreen=true;
-			},3000);
+			},100);
 		 }
 		 //退出全屏
 		 function exitFullscreen() {
