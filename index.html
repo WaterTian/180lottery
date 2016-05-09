@@ -45,25 +45,17 @@
 		<script src="js/postprocessing/MaskPass.js"></script>
 		<script src="js/postprocessing/ShaderPass.js"></script>
 		<script src="js/postprocessing/GlitchPass.js"></script>
-
-
 		<script>
 			var container;
 			var camera, scene, renderer, geometry, sprites=[], materials = [], particles=[], i, picNums=[], chooseNums=[];
 			var mouseX = 0, mouseY = 0;
 			var sky;
-
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
 
 			var papleNum=72;//总人数
 
-
 			var isStart=false;
-
-
-
-
             ///////////////
 			var clock = new THREE.Clock();
 			var Mesh1,Mesh8,Mesh0;
@@ -75,13 +67,9 @@
 			var Mesh1v=[],Mesh8v=[],Mesh0v=[];
 			var MoveV=[];
 			/////////////////
-
-
 			init();
 			animate();
-
 			function init() {
-
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
