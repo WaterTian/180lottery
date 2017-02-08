@@ -1,6 +1,6 @@
 # 180Lottery 
 
-[![180lottery img](http://watertian.github.io/180lottery/180lottery.jpg)](http://inch-ci.org/github/GoodBoyDigital/pixi.js)
+[![180lottery img](http://watertian.github.io/180lottery/180lottery.jpg)](http://watertian.github.io/180lottery/)
 
 
 WebGL Lottery Project 0.1
