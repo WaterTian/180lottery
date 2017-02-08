@@ -1,7 +1,7 @@
 # 180Lottery
 WebGL Lottery Project 0.1
 
-Based on three.js https://github.com/mrdoob/three.js/
+Based on three.js
 
 Compatible with Mobile & PC
 
