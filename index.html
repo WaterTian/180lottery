@@ -133,6 +133,23 @@
 
                 if (window.DeviceOrientationEvent)window.addEventListener("deviceorientation", orientationHandler, false);
 
+
+
+				window.addEventListener('keydown', function(e) {
+					if (e.keyCode === 80) {
+						//key P
+						var de = document.documentElement;
+						if (de.requestFullscreen) {
+							de.requestFullscreen();
+						} else if (de.mozRequestFullScreen) {
+							de.mozRequestFullScreen();
+						} else if (de.webkitRequestFullScreen) {
+							de.webkitRequestFullScreen();
+						}
+						resizeCamera(cameraNum);
+					}
+				});
+
 			}
 
 
@@ -399,27 +416,38 @@
 
 			function loadTex(_num)
 			{
-				var loader = new THREE.TextureLoader();
-				loader.load(
-					"pics/p_"+(_num+1)+".jpg",
-					function ( texture ) 
-					{
-						sprites.push(texture);
-						picNums.push(_num);
+				var text = "用户"+_num;
 
-						if(_num<papleNum-1){
-							var _n=_num+1;
-							loadTex(_n);
-							document.getElementById( 'loading' ).textContent=Math.floor(_num/papleNum*100)+"%";
-						}
+		        var canvas = document.createElement('canvas');
+		        var context = canvas.getContext('2d');
+		        var textWidth = parseInt(context.measureText(text).width);
+		        var fontSize = 48;
+		        canvas.width = canvas.height = 256;
+		        context.fillStyle = "#fff";
+		        context.font = fontSize+"px Arial";
+		        context.textAlign="center";
+		        context.fillText(text,canvas.width/2,canvas.height/2);
 
-						if(_num==papleNum-1)
-						{
-							setTimeout(initPlans,100);
-							document.getElementById( 'loading' ).textContent="";
-						}
-					}
-				);
+		        var texture = new THREE.Texture( undefined, THREE.UVMapping, THREE.RepeatWrapping, THREE.RepeatWrapping );
+		        texture.image = canvas;
+		        texture.needsUpdate = true;
+
+
+				sprites.push(texture);
+				picNums.push(_num);
+
+				if(_num<papleNum-1){
+					var _n=_num+1;
+					loadTex(_n);
+					document.getElementById( 'loading' ).textContent=Math.floor(_num/papleNum*100)+"%";
+				}
+
+				if(_num>=papleNum-1)
+				{
+					document.getElementById( 'loading' ).textContent="";
+					setTimeout(initPlans,100);
+					
+				}
 
 
 			}
@@ -427,9 +455,10 @@
 
 			function initPlans()
 			{
+				document.getElementById( 'loading' ).textContent="";
 				
 				geometry = new THREE.Geometry();
-				for ( i = 0; i < 120; i ++ ) {
+				for ( i = 0; i < 160; i ++ ) {
 					var vertex = new THREE.Vector3();
 					vertex.x = Math.random() * 2000 - 1000;
 					vertex.y = Math.random() * 2000 - 1000;
@@ -439,7 +468,7 @@
 
 				for ( i = 0; i < picNums.length; i ++ ) 
 				{
-					var _m = new THREE.PointsMaterial( { size:Math.random()*40+40, map: sprites[picNums[i]], depthTest: true, transparent : true } );
+					var _m = new THREE.PointsMaterial( { size:Math.random()*40+40, map: sprites[picNums[i]],blending: THREE.AdditiveBlending, depthTest: true, transparent : true } );
 					materials.push(_m);
 
 					var _p = new THREE.Points( geometry, _m);
@@ -510,8 +539,6 @@
 			var isFullScreen=false;
 			function Choose(event)
 			{
-				// requestFullScreen();
-				// if(!isFullScreen)return;
 				if(!isStart)
 				{
 					isStart=true;
@@ -663,37 +690,6 @@
 				a = Math.min(a + Math.random() * (b + 2 - a), b);
 				return d ? parseInt(a) : a
 			}
-
-
-        // requestFullScreen();
-
-		//进入全屏
-		 function requestFullScreen() {
-		     var de = document.documentElement;
-		     if (de.requestFullscreen) {
-		         de.requestFullscreen();
-		     } else if (de.mozRequestFullScreen) {
-		         de.mozRequestFullScreen();
-		     } else if (de.webkitRequestFullScreen) {
-		         de.webkitRequestFullScreen();
-		     }
-
-			setTimeout(function()
-			{
-				isFullScreen=true;
-			},100);
-		 }
-		 //退出全屏
-		 function exitFullscreen() {
-		     var de = document;
-		     if (de.exitFullscreen) {
-		         de.exitFullscreen();
-		     } else if (de.mozCancelFullScreen) {
-		         de.mozCancelFullScreen();
-		     } else if (de.webkitCancelFullScreen) {
-		         de.webkitCancelFullScreen();
-		     }
-		 }
 
 
 		</script>
