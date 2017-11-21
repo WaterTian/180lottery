@@ -38,6 +38,7 @@
 		<script src="build/TweenMax.min.js"></script>
 
 		<script src="js/Detector.js"></script>
+		<script src="js/OBJLoader.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 
 		<script src="js/shaders/CopyShader.js"></script>
@@ -75,9 +76,33 @@
 					{
 						createjs.Sound.play(event.src);
 					},4000);
-				    
+
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},4100);
+
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7000);
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7100);
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7200);
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7300);
 				}
 			});
+
+			////
+			var Joy;
 
 
 			var papleNum=nameArr.length;//总人数
@@ -104,7 +129,7 @@
 				camera.position.z = 1.4;
 
 				scene = new THREE.Scene();
-				scene.fog = new THREE.FogExp2( 0x144c7f, 0.001 );
+				scene.fog = new THREE.FogExp2( 0x165793, 0.001 );
 
 
 				renderer = new THREE.WebGLRenderer();
@@ -178,7 +203,15 @@
 				});
 
 
-			}
+
+				var loader = new THREE.OBJLoader( );
+					loader.load( 'model/joy.obj', function ( object ) {
+						Joy = object;
+						Joy.scale.set( 0, 0, 0 );
+						Joy.position.set( 0, -800, 800 );
+						scene.add( Joy );
+					} );
+				}
 
 
 
@@ -476,8 +509,6 @@
 					setTimeout(initPlans,100);
 					
 				}
-
-
 			}
 
 
@@ -601,6 +632,9 @@
 			    console.log(chooseNums);
 
 			    setTimeout(changePics,4000);
+
+
+			    Joy.scale.set( 15, 15, 15 );
 			}
 
 			function changePics()
@@ -612,7 +646,7 @@
 				}
 
 
-				setTimeout(goHome,6000);
+				setTimeout(goHome,8000);
 
 			}
 
@@ -620,6 +654,8 @@
 			{
                 MoveAble=true;
 				setTimeout(goHomeComplete,100);
+
+				Joy.scale.set( 0, 0, 0 );
 			}
 			function goHomeComplete()
 			{
