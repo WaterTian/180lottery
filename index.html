@@ -78,10 +78,6 @@
 						createjs.Sound.play(event.src);
 					},4000);
 
-					setTimeout(function()
-					{
-						createjs.Sound.play(event.src);
-					},4100);
 
 					setTimeout(function()
 					{
@@ -95,10 +91,6 @@
 					{
 						createjs.Sound.play(event.src);
 					},7200);
-					setTimeout(function()
-					{
-						createjs.Sound.play(event.src);
-					},7300);
 				}
 			});
 
@@ -523,7 +515,7 @@
 		        canvas.width = canvas.height = 256;
 
 				context.fillStyle="#fff";
-				context.fillRect(0,0,canvas.width,canvas.height);
+				context.fillRect(0,0,canvas.width,canvas.height*4/5);
 
 		        context.fillStyle = "#144c7f";
 		        context.font = fontSize+"px Arial";
@@ -693,7 +685,7 @@
 				{
 					particles[i].material=new THREE.PointsMaterial(
 						{
-							size:30,
+							size:80,
 							map:ChoosedSprite,
 							depthTest:true,
 							// blending: THREE.AdditiveBlending, 
