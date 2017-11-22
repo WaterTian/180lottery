@@ -210,6 +210,7 @@
 
 				/////  
 				var LeapAble=false;
+				var LeapAbleTime=0;
 				Leap.loop({
 					frame: function(frame) {
 
@@ -220,6 +221,10 @@
 							var velocity = hand.palmVelocity;
 							var direction = hand.direction;
 
+							// console.log(position);
+
+							// mouseX = position[0]*window.innerWidth;
+							// mouseY = position[1]*window.innerHeight;
 
 							mouseX = direction[0]*window.innerWidth;
 							mouseY = direction[1]*window.innerHeight;
@@ -228,11 +233,15 @@
 							// console.log(dot);
 
 							if(dot<0){
-								if(LeapAble){
+								LeapAbleTime++;
+								// console.log(LeapAbleTime);
+								if(LeapAble && LeapAbleTime>20){
 									Choose();
 									LeapAble=false;
+									LeapAbleTime=0;
 								}
 							}else{
+								LeapAbleTime=0;
 								LeapAble=true;
 							}
 						}
@@ -685,7 +694,7 @@
 				{
 					particles[i].material=new THREE.PointsMaterial(
 						{
-							size:80,
+							size:40,
 							map:ChoosedSprite,
 							depthTest:true,
 							// blending: THREE.AdditiveBlending, 
