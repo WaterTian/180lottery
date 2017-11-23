@@ -31,10 +31,15 @@
 			0%
 		</div>
 
+	    <script src="/socket.io/socket.io.js"></script>
+	    <script src="build/leap-0.6.4.min.js"></script>
+		<script src="build/soundjs.min.js"></script>
+
 		<script src="build/three.min.js"></script>
 		<script src="build/TweenMax.min.js"></script>
 
 		<script src="js/Detector.js"></script>
+		<script src="js/OBJLoader.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 
 		<script src="js/shaders/CopyShader.js"></script>
@@ -53,7 +58,47 @@
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
 
-			var papleNum=72;//总人数
+			var names = "李伟娜,李朋旗,高晓萌,蔡晓光,曹梦洁,刘睦英,刘瑞麒,刘志文,曾维彬,纪小芳,冯栋,成龙,冯婉秋,王鹤仑,路晶,骆椿蕾,李雪,孙昭,刘川,王建斌,柯文杰,刘晨,潘栋栋,吴迪,孙菲,贾志刚,刘大跃,江墨禅,卢薪宇,张楠,涂山璞,徐鵾,谷小庆,易晓智,田思,蔡鹏,罗晓风,于爽,冉师师,张梦圆,张宇,付顺平,萧振宇,孟宝石,陈佳芮,万方子,周伟强,刘栋,吕寅哲,詹琼琳,王晓伟,马志娟,吕轩冕,赵宏磊,李晨,李雨路,余国雄,高荣,杨世玮,耿玮,蔡晨雨,翟月,向伦平,赵荟,刘锟,张天舒,邓应矛,张稳根,谢秉权,林识序,孙闻,杜万利,朱易,赵楚旋,冯雅楠,曾志勇,栾璐,李秀,郭悦,王雨,余文婷,张嘉文,褚乔,霍虹,谢雯,王晓晴,裴嘉丽,梁元秋,尚坤,牛映雪,王怡然,张牧星,蔡月悦,孙润雯,游雪钦,张艺瑾,王译唯,郑宇,张天益,倪晓楠,吕玥瑶,汪茜,郭宇,于景景,杜环宇,张耀之,陈灿,张充,王梦迪,梁炳淑,李佳薇,田渊,洪琳軒,张鹏,王凯平,全力,孟思思,张祥和,王琬璐,齐明,黄耀坤,吕雪枫,叶玉菁,邹磊,于梦媛,薛丽,石智鹏,马芳,赵洋,刘燕,高陆洋,宋佳旭,王颖达,卢骏,幸玉瑶,杨宇,LIM YAN SHAN,汤慧玲,容静文,姜艳红,刘世明,高晖,娄承帅,刘洁,楚晓阳,卢润琦,孙振华,尹浩,赵立华,郭轶男,贾晓婉,王惠,于浩,崔路路,李艳华,卜祥猛,沙漠,罗军学,郭芷含,楚怀晨,陈晨,宿剑伟,王磊,王笛,于晓磊,李歆苑,曹博华,吴婧,陶欣,姜邵钦,刘晓迪,李艳,李文强,刘雨丝,曹锋铭,侯文迪,林松,吴胜秋,宋雅丽,王美林,许超,李强,方昕,刘云,侯培远,李宁子,代文萍,杨利,卢嵩,李惠,敖伟波,王雪梅,王斯默,杨志强,李旭,钟恒,李定轩,韩军,袁雷,冷佳迎,廖安宜,陈维琪,刘阳,杜琳,朱明辉,胡佳欣,张雨柔,候成功,李鑫,李安晋,周睿,李伊桐,郭昕然";
+
+			var nameArr = names.split(",");
+
+			console.log(nameArr);
+			////
+			/////sound
+			var socket = io.connect('/');
+			socket.on('playSound', function(name){
+		    	createjs.Sound.alternateExtensions = ["mp3"];
+				createjs.Sound.addEventListener('fileload',play);
+				createjs.Sound.registerSound(name+'.mp3');
+
+				function play(event){
+					console.log("play");
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},4000);
+
+
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7000);
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7100);
+					setTimeout(function()
+					{
+						createjs.Sound.play(event.src);
+					},7200);
+				}
+			});
+
+			////
+			var Joy;
+
+
+			var papleNum=nameArr.length;//总人数
 
 			var isStart=false;
             ///////////////
@@ -77,7 +122,7 @@
 				camera.position.z = 1.4;
 
 				scene = new THREE.Scene();
-				scene.fog = new THREE.FogExp2( 0x144c7f, 0.001 );
+				scene.fog = new THREE.FogExp2( 0x165793, 0.001 );
 
 
 				renderer = new THREE.WebGLRenderer();
@@ -132,6 +177,78 @@
 				// document.addEventListener('touchmove', function(event){event.preventDefault();}, false);
 
                 if (window.DeviceOrientationEvent)window.addEventListener("deviceorientation", orientationHandler, false);
+
+
+
+				window.addEventListener('keydown', function(e) {
+					if (e.keyCode === 80) {
+						//key P
+						var de = document.documentElement;
+						if (de.requestFullscreen) {
+							de.requestFullscreen();
+						} else if (de.mozRequestFullScreen) {
+							de.mozRequestFullScreen();
+						} else if (de.webkitRequestFullScreen) {
+							de.webkitRequestFullScreen();
+						}
+						resizeCamera(cameraNum);
+					}
+				});
+
+
+
+				var loader = new THREE.OBJLoader();
+				loader.load( 'model/joy.obj', function ( object ) {
+					Joy = object;
+					// Joy.scale.set( 0, 0, 0 );
+					Joy.scale.set( 6, 6, 6 );
+					Joy.position.set( 0, -300, 900 );
+					scene.add( Joy );
+				} );
+
+
+
+				/////  
+				var LeapAble=false;
+				var LeapAbleTime=0;
+				Leap.loop({
+					frame: function(frame) {
+
+						// console.log(frame.hands.length);
+						if (frame.hands.length > 0) {
+							var hand = frame.hands[0];
+							var position = hand.palmPosition;
+							var velocity = hand.palmVelocity;
+							var direction = hand.direction;
+
+							// console.log(position);
+
+							// mouseX = position[0]*window.innerWidth;
+							// mouseY = position[1]*window.innerHeight;
+
+							mouseX = direction[0]*window.innerWidth;
+							mouseY = direction[1]*window.innerHeight;
+
+							var dot = Leap.vec3.dot(hand.direction, hand.indexFinger.direction);
+							// console.log(dot);
+
+							if(dot<0){
+								LeapAbleTime++;
+								// console.log(LeapAbleTime);
+								if(LeapAble && LeapAbleTime>20){
+									Choose();
+									LeapAble=false;
+									LeapAbleTime=0;
+								}
+							}else{
+								LeapAbleTime=0;
+								LeapAble=true;
+							}
+						}
+					}
+				});
+
+
 
 			}
 
@@ -399,37 +516,50 @@
 
 			function loadTex(_num)
 			{
-				var loader = new THREE.TextureLoader();
-				loader.load(
-					"pics/p_"+(_num+1)+".jpg",
-					function ( texture ) 
-					{
-						sprites.push(texture);
-						picNums.push(_num);
+				var text = nameArr[_num];
 
-						if(_num<papleNum-1){
-							var _n=_num+1;
-							loadTex(_n);
-							document.getElementById( 'loading' ).textContent=Math.floor(_num/papleNum*100)+"%";
-						}
+		        var canvas = document.createElement('canvas');
+		        var context = canvas.getContext('2d');
+		        var fontSize = 64;
+		        canvas.width = canvas.height = 256;
 
-						if(_num==papleNum-1)
-						{
-							setTimeout(initPlans,100);
-							document.getElementById( 'loading' ).textContent="";
-						}
-					}
-				);
+				context.fillStyle="#fff";
+				context.fillRect(0,0,canvas.width,canvas.height*4/5);
+
+		        context.fillStyle = "#144c7f";
+		        context.font = fontSize+"px Arial";
+		        context.textAlign="center";
+		        context.fillText(text,canvas.width/2,canvas.height/2);
+
+		        var texture = new THREE.Texture( undefined, THREE.UVMapping, THREE.RepeatWrapping, THREE.RepeatWrapping );
+		        texture.image = canvas;
+		        texture.needsUpdate = true;
 
 
+				sprites.push(texture);
+				picNums.push(_num);
+
+				if(_num<papleNum-1){
+					var _n=_num+1;
+					loadTex(_n);
+					document.getElementById( 'loading' ).textContent=Math.floor(_num/papleNum*100)+"%";
+				}
+
+				if(_num>=papleNum-1)
+				{
+					document.getElementById( 'loading' ).textContent="";
+					setTimeout(initPlans,100);
+					
+				}
 			}
 
 
 			function initPlans()
 			{
+				document.getElementById( 'loading' ).textContent="";
 				
 				geometry = new THREE.Geometry();
-				for ( i = 0; i < 120; i ++ ) {
+				for ( i = 0; i < 128; i ++ ) {
 					var vertex = new THREE.Vector3();
 					vertex.x = Math.random() * 2000 - 1000;
 					vertex.y = Math.random() * 2000 - 1000;
@@ -439,7 +569,15 @@
 
 				for ( i = 0; i < picNums.length; i ++ ) 
 				{
-					var _m = new THREE.PointsMaterial( { size:Math.random()*40+40, map: sprites[picNums[i]], depthTest: true, transparent : true } );
+					var _m = new THREE.PointsMaterial( 
+						{ 
+							size:Math.random()*20+20, 
+							map: sprites[picNums[i]],
+							// blending: THREE.AdditiveBlending, 
+							depthTest: true, 
+							transparent : true 
+						} );
+
 					materials.push(_m);
 
 					var _p = new THREE.Points( geometry, _m);
@@ -510,8 +648,6 @@
 			var isFullScreen=false;
 			function Choose(event)
 			{
-				// requestFullScreen();
-				// if(!isFullScreen)return;
 				if(!isStart)
 				{
 					isStart=true;
@@ -532,7 +668,10 @@
 			    var Num = Math.floor(Math.random()*picNums.length);
 			    chooseNums.push(picNums[Num]);
 
-			    console.log('choose'+picNums[Num]);
+			    console.log('choose'+picNums[Num] + nameArr[picNums[Num]]);
+
+			    //////////
+			    socket.emit('buildSound', nameArr[picNums[Num]]);
 
 			    ChoosedSprite = sprites[picNums[Num]];
 
@@ -543,6 +682,9 @@
 			    console.log(chooseNums);
 
 			    setTimeout(changePics,4000);
+
+
+			    Joy.scale.set( 6, 6, 6 );
 			}
 
 			function changePics()
@@ -550,7 +692,14 @@
 		    	MoveAble=false;
 				for ( i = 0; i < particles.length; i ++ ) 
 				{
-					particles[i].material=new THREE.PointsMaterial({size:200,map:ChoosedSprite,depthTest:true,transparent:true});
+					particles[i].material=new THREE.PointsMaterial(
+						{
+							size:40,
+							map:ChoosedSprite,
+							depthTest:true,
+							// blending: THREE.AdditiveBlending, 
+							transparent:true
+						});
 				}
 
 
@@ -562,6 +711,8 @@
 			{
                 MoveAble=true;
 				setTimeout(goHomeComplete,100);
+
+				Joy.scale.set( 0, 0, 0 );
 			}
 			function goHomeComplete()
 			{
@@ -663,37 +814,6 @@
 				a = Math.min(a + Math.random() * (b + 2 - a), b);
 				return d ? parseInt(a) : a
 			}
-
-
-        // requestFullScreen();
-
-		//进入全屏
-		 function requestFullScreen() {
-		     var de = document.documentElement;
-		     if (de.requestFullscreen) {
-		         de.requestFullscreen();
-		     } else if (de.mozRequestFullScreen) {
-		         de.mozRequestFullScreen();
-		     } else if (de.webkitRequestFullScreen) {
-		         de.webkitRequestFullScreen();
-		     }
-
-			setTimeout(function()
-			{
-				isFullScreen=true;
-			},100);
-		 }
-		 //退出全屏
-		 function exitFullscreen() {
-		     var de = document;
-		     if (de.exitFullscreen) {
-		         de.exitFullscreen();
-		     } else if (de.mozCancelFullScreen) {
-		         de.mozCancelFullScreen();
-		     } else if (de.webkitCancelFullScreen) {
-		         de.webkitCancelFullScreen();
-		     }
-		 }
 
 
 		</script>
